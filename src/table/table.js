@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {addItemAction,editItemAction,cancelItemAction} from '../redux/action_creator';
+import {addItemAction,editItemAction,cancelItemAction,setInputAction,saveItemAction} from '../redux/action_creator';
 import './table.css';
 
 class Table extends Component{
@@ -27,14 +27,14 @@ class Table extends Component{
     }
 
     edit=(name)=>{
-        console.log('name',name)
-        this.props.editItem({item:name,isEdit:true})
+        let {csgrp_name} = name.fields;
+        this.props.editItem({item:name,isEdit:true, selectId:name.pk})
+        this.props.setInput(csgrp_name)
     }
 
 
     render(){
-        let {isAdd,tableData} = this.props.iniState
-        console.log('tableData',tableData)
+        let {isAdd,tableData} = this.props.iniState;
        return(
           <div style={{width:'90%',margin:'0 auto'}}>
             <table className="table table-bordered">
@@ -81,5 +81,7 @@ class Table extends Component{
 export default connect(state=>({iniState:state}),{
     addItem:addItemAction,
     editItem:editItemAction,
-    cancelItem:cancelItemAction
+    saveItem:saveItemAction,
+    cancelItem:cancelItemAction,
+    setInput:setInputAction
 })(Table)
